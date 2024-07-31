@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import PostAuthor from "./PostAuthor";
 
 const PostsItem = ({
-  postId,
+  postID,
   title,
   thumbnail,
   description,
@@ -19,7 +19,7 @@ const PostsItem = ({
         <img src={thumbnail} alt={title} />
       </div>
       <div className="mt-6">
-        <Link to={`posts/${postId}`}>
+        <Link to={`posts/${postID}`}>
           <h3 className="font-bold">{postTitle}</h3>
         </Link>
         <p>{shortDesc}</p>

@@ -29,7 +29,7 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "post/:id",
+        path: "posts/:id",
         element: <PostDetails />,
       },
       {
@@ -51,6 +51,14 @@ const router = createBrowserRouter([
       {
         path: "create",
         element: <CreatePost />,
+      },
+      {
+        path: "posts/:id/delete",
+        element: <DeletePost />,
+      },
+      {
+        path: "posts/:id/edit",
+        element: <EditPost />,
       },
       {
         path: "posts/categories/:category",

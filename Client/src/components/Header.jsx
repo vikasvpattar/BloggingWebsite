@@ -12,7 +12,7 @@ const Header = () => {
       </Link>
       <ul className="flex items-center gap-12">
         <li>
-          <NavLink to="/profile">Michal</NavLink>
+          <NavLink to="/profile/ada">Michal</NavLink>
         </li>
         <li>
           <NavLink to="/create">Create Post</NavLink>
