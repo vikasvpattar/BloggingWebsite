@@ -7,7 +7,7 @@ const Dashboard = () => {
   return (
     <section className="w-3/4 mx-auto mt-10 ">
       {posts.length > 0 ? (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-3">
           {posts.map((post) => {
             return (
               <article

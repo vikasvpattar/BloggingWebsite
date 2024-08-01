@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
+
 const AuthorsData = [
   {
     id: 1,
@@ -41,29 +42,33 @@ const AuthorsData = [
 const Authors = () => {
   const [authors, setAuthors] = useState(AuthorsData);
   return (
-    <section>
+    <section className="px-4 py-8 md:px-8 md:py-12">
       {authors.length > 0 ? (
-        <div className="grid grid-cols-4 gap-12">
-          {authors.map(({ id, avatar, name, posts }) => {
-            return (
-              <Link
-                className="bg-white rounded-xl p-4 flex items-center gap-4 transition ease-in-out delay-150 hover:shadow-md"
-                key={id}
-                to={`/posts/users/${id}`}
-              >
-                <div className="size-16 overflow-hidden">
-                  <img className="object-cover size-full rounded-full" src={avatar} alt={`Image of ${name}`} />
-                </div>
-                <div>
-                  <h4>{name}</h4>
-                  <p>{posts}</p>
-                </div>
-              </Link>
-            );
-          })}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          {authors.map(({ id, avatar, name, posts }) => (
+            <Link
+              className="bg-white rounded-xl p-4 flex items-center gap-4 transition ease-in-out delay-150 hover:shadow-lg"
+              key={id}
+              to={`/posts/users/${id}`}
+            >
+              <div className="w-16 h-16 overflow-hidden">
+                <img
+                  className="object-cover w-full h-full rounded-full"
+                  src={avatar}
+                  alt={`Image of ${name}`}
+                />
+              </div>
+              <div>
+                <h4 className="text-lg font-semibold">{name}</h4>
+                <p className="text-sm text-gray-600">{posts} Posts</p>
+              </div>
+            </Link>
+          ))}
         </div>
       ) : (
-        <h2>No users or authors found.</h2>
+        <h2 className="text-center text-xl font-semibold mt-8">
+          No users or authors found.
+        </h2>
       )}
     </section>
   );

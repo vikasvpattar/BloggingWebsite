@@ -13,20 +13,27 @@ const PostsItem = ({
   const shortDesc =
     description.length > 145 ? description.substr(0, 145) + "..." : description;
   const postTitle = title.length > 30 ? title.substr(0, 30) + "..." : title;
+
   return (
-    <article className="bg-white p-4 pb-8 rounded-lg transition delay-100 hover:shadow-md">
-      <div className="rounded-md h-64 overflow-hidden">
-        <img src={thumbnail} alt={title} />
+    <article className="bg-white p-4 pb-8 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+      <div className="rounded-md h-48 sm:h-64 overflow-hidden">
+        <img
+          className="w-full h-full object-cover"
+          src={thumbnail}
+          alt={title}
+        />
       </div>
-      <div className="mt-6">
+      <div className="mt-4">
         <Link to={`posts/${postID}`}>
-          <h3 className="font-bold">{postTitle}</h3>
+          <h3 className="text-lg font-bold text-gray-800 hover:text-blue-600 transition-colors duration-200">
+            {postTitle}
+          </h3>
         </Link>
-        <p>{shortDesc}</p>
-        <div className="flex justify-between items-end">
+        <p className="mt-2 text-gray-600">{shortDesc}</p>
+        <div className="flex justify-between items-center mt-4">
           <PostAuthor />
           <Link
-            className="bg-gray-200 rounded-md px-2 py-1"
+            className="text-sm text-white bg-blue-500 rounded-md px-3 py-1 hover:bg-blue-600 transition-colors duration-200"
             to={`/posts/categories/${category}`}
           >
             {category}
