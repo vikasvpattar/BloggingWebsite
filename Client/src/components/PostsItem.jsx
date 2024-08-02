@@ -24,7 +24,7 @@ const PostsItem = ({
         />
       </div>
       <div className="mt-4">
-        <Link to={`posts/${postID}`}>
+        <Link to={`/posts/${postID}`}>
           <h3 className="text-lg font-bold text-gray-800 hover:text-blue-600 transition-colors duration-200">
             {postTitle}
           </h3>

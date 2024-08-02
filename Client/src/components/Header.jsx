@@ -88,7 +88,7 @@ const Header = () => {
               className={({ isActive }) =>
                 isActive ? "text-blue-500" : "hover:text-blue-500"
               }
-              to="/author"
+              to="/authors"
             >
               Author
             </NavLink>
