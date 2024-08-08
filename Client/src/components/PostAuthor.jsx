@@ -1,19 +1,47 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import ReactTimeAgo from "react-time-ago";
+import TimeAgo from "javascript-time-ago";
+import en from "javascript-time-ago/locale/en.json";
+import ru from "javascript-time-ago/locale/ru.json";
 
+TimeAgo.addDefaultLocale(en);
+TimeAgo.addLocale(ru);
 const PostAuthor = ({ createdAt, authorID }) => {
+  const [author, setAuthor] = useState({});
+  const BASE_URL = import.meta.env.VITE_APP_BASE_URL;
+
+  useEffect(() => {
+    const getAuthor = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/users/${authorID}`);
+        setAuthor(response?.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getAuthor();
+  });
   return (
-    <Link to={`/posts/users/vfdfv`} className="flex gap-4 mt-4 items-center">
+    <Link
+      to={`/posts/users/${authorID}`}
+      className="flex gap-4 mt-4 items-center"
+    >
       <div className="flex-shrink-0">
         <img
-          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YXZhdGFyfGVufDB8fDB8fHww"
+          src={`${import.meta.env.VITE_APP_ASSETS_URL}/uploads/${
+            author?.avatar
+          }`}
           alt="Author"
           className="w-8 h-8 rounded-full object-cover"
         />
       </div>
       <div className="flex flex-col text-sm">
-        <h5 className="font-semibold">By: Michal Whon</h5>
-        <small className="text-gray-500">Just now</small>
+        <h5 className="font-semibold">{author?.name}</h5>
+        <small className="text-gray-500">
+          <ReactTimeAgo date={new Date(createdAt)} locale="en-US" />
+        </small>
       </div>
     </Link>
   );

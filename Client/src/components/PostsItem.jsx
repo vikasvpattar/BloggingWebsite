@@ -14,7 +14,6 @@ const PostsItem = ({
   const shortDesc =
     description.length > 145 ? description.substr(0, 145) + "..." : description;
   const postTitle = title.length > 30 ? title.substr(0, 30) + "..." : title;
-  console.log(`${import.meta.env.VITE_APP_ASSETS_URL}/uploads/${thumbnail}`);
 
   return (
     <article className="bg-white p-4 pb-8 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">

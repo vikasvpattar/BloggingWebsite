@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PostsItem from "./PostsItem";
-import { DummyPosts } from "../data.js";
+
 import axios from "axios";
 import Loader from "./Loader.jsx";
 
@@ -39,17 +39,17 @@ const Posts = () => {
               category,
               title,
               description,
-              authorID,
+              creator,
               createdAt,
             }) => (
               <PostsItem
                 key={_id}
-                postId={_id}
+                postID={_id}
                 thumbnail={thumbnail}
                 category={category}
                 title={title}
                 description={description}
-                authorID={authorID}
+                authorID={creator}
                 createdAt={createdAt}
               />
             )

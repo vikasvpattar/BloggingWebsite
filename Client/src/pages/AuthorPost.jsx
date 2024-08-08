@@ -1,23 +1,56 @@
-import React, { useState } from "react";
-import { DummyPosts } from "../data";
-import PostsItem from "../components/PostsItem";
+import React, { useState, useEffect } from "react";
+import PostsItem from "../components/PostsItem.jsx";
+import axios from "axios";
+import Loader from "../components/Loader.jsx";
+import { useParams } from "react-router-dom";
 
 const AuthorPost = () => {
-  const [posts, setPosts] = useState(DummyPosts);
+  const [posts, setPosts] = useState([]);
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const BASE_URL = import.meta.env.VITE_APP_BASE_URL;
+  const {id}=useParams()
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      setError("");
+      setIsLoading(true);
+      try {
+        const response = await axios.get(`${BASE_URL}/posts/users/${id}`);
+        setPosts(response?.data);
+      } catch (error) {
+        setError(error.response.data.message);
+      }
+      setIsLoading(false);
+    };
+    fetchPosts();
+  }, [id]);
+  if (isLoading) {
+    return <Loader />;
+  }
   return (
     <section className="p-4 bg-gray-100 min-h-screen">
       {posts.length > 0 ? (
         <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           {posts.map(
-            ({ id, thumbnail, category, title, description, authorID }) => (
+            ({
+              _id,
+              thumbnail,
+              category,
+              title,
+              description,
+              creator,
+              createdAt,
+            }) => (
               <PostsItem
-                key={id}
-                postId={id}
+                key={_id}
+                postID={_id}
                 thumbnail={thumbnail}
                 category={category}
                 title={title}
                 description={description}
-                authorID={authorID}
+                authorID={creator}
+                createdAt={createdAt}
               />
             )
           )}

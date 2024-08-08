@@ -1,69 +1,70 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import PostAuthor from "../components/PostAuthor";
-import { Link } from "react-router-dom";
-
+import { Link, useParams } from "react-router-dom";
+import { UserContext } from "../context/userContext.jsx";
+import DeletePost from "./DeletePost.jsx";
+import Loader from "../components/Loader.jsx";
+import axios from "axios";
 const PostDetails = () => {
+  const { id } = useParams();
+  const [post, setPost] = useState(null);
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const { currentUser } = useContext(UserContext);
+  const BASE_URL = import.meta.env.VITE_APP_BASE_URL;
+  useEffect(() => {
+    const getPost = async () => {
+      setIsLoading(true);
+      try {
+        const response = await axios.get(`${BASE_URL}/posts/${id}`);
+        setPost(response?.data);
+        setCreatorID(response?.data.creator);
+      } catch (error) {
+        console.log(error);
+      }
+      setIsLoading(false);
+    };
+    getPost();
+  }, []);
+  if (isLoading) {
+    return <Loader />;
+  }
   return (
     <section className="bg-white mx-auto p-4 rounded-xl max-w-full sm:max-w-md md:max-w-lg lg:max-w-2xl mt-6 sm:mt-8 md:mt-10 lg:mt-12">
-      <div className="space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-          <PostAuthor />
-          <div className="flex gap-2 mt-2 sm:mt-0">
-            <Link
-              to={`/posts/nsbs/edit`}
-              className="px-3 py-1 bg-blue-700 text-white rounded-md text-sm"
-            >
-              Edit
-            </Link>
-            <Link
-              to={`/posts/nsbs/delete`}
-              className="px-3 py-1 bg-red-700 text-white rounded-md text-sm"
-            >
-              Delete
-            </Link>
+      {error && <p className="text-red-500">{error}</p>}
+      {post && (
+        <div>
+          <div className="space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+              <PostAuthor authorID={post.creator} createdAt={post.createdAt} />
+              {currentUser?.id == post.creator && (
+                <div className="flex gap-2 mt-2 sm:mt-0">
+                  <Link
+                    to={`/posts/${post?._id}/edit`}
+                    className="px-3 py-1 bg-blue-700 text-white rounded-md text-sm"
+                  >
+                    Edit
+                  </Link>
+                  <DeletePost postID={id} />
+                </div>
+              )}
+            </div>
+            <h1 className="text-xl font-bold">{post.title}</h1>
+            <div className="">
+              <img
+                src={`${import.meta.env.VITE_APP_ASSETS_URL}/uploads/${
+                  post.thumbnail
+                }`}
+                alt=""
+                className=" inset-0 w-full h-full object-cover rounded-lg"
+              />
+            </div>
+          </div>
+          <div className="space-y-4 mt-4">
+            <p dangerouslySetInnerHTML={{ __html: post.description }}></p>
           </div>
         </div>
-        <h1 className="text-xl font-bold">This is the post title</h1>
-        <div className="">
-          <img
-            src="https://images.unsplash.com/photo-1640161704729-cbe966a08476?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y3J5cHRvY3VycmVuY3l8ZW58MHx8MHx8fDA%3D"
-            alt=""
-            className=" inset-0 w-full h-full object-cover rounded-lg"
-          />
-        </div>
-      </div>
-      <div className="space-y-4 mt-4">
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus,
-          voluptas tenetur. Quod aperiam quibusdam nemo, expedita atque
-          inventore? Amet distinctio quisquam delectus natus totam, a accusamus
-          repellendus explicabo velit quidem, dolor voluptates expedita
-          accusantium aliquam? Accusamus vero quod nesciunt nihil ratione quos,
-          ullam repudiandae vitae a perferendis quaerat id esse! Aperiam esse
-          illum autem asperiores quasi, nihil sequi reiciendis vel fuga aut
-          iusto blanditiis. Iusto deserunt exercitationem maiores magni
-          provident ducimus sit? Excepturi fuga quos, velit culpa corporis esse!
-          Molestias porro soluta beatae saepe, nemo est minus fuga odio ad
-          aspernatur repellat obcaecati harum laborum natus iure labore.
-          Pariatur, cupiditate!
-        </p>
-        <p>
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Saepe
-          suscipit rerum quam quaerat praesentium laboriosam aperiam consequatur
-          architecto eaque? Iste aspernatur placeat enim at consequatur omnis
-          neque officiis molestias! Excepturi necessitatibus odio labore
-          consectetur praesentium voluptatum, enim, quis earum porro tempore
-          aliquam ut error dicta ipsum, vel magni neque. At?
-        </p>
-        <p>
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Maiores
-          totam expedita eligendi itaque beatae repudiandae fugit quis id nihil
-          dignissimos, corporis mollitia error velit repellendus perferendis
-          debitis alias rerum possimus! Enim dolorem corrupti minima sint quod
-          dolor repellat magni nisi recusandae quia hic amet sapiente porro,
-          odit labore quas eligendi illum distinctio. Blanditiis, cumque soluta.
-        </p>
-      </div>
+      )}
     </section>
   );
 };

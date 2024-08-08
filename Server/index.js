@@ -15,13 +15,16 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
 
 app.use(upload());
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/api/users", userRoutes);
 app.use("/api/posts", postRoutes);
 app.use(notFound);
 app.use(errorHandler);
-app.use("/uploads", express.static(__dirname + "/uploads"));
-const uploadsPath = path.join(__dirname, "uploads");
-console.log("Serving static files from:", uploadsPath);
+
+const uploadsPath = path.join(
+  __dirname,
+  "uploads" + `/CS1ae51763-ea6c-4f06-a3ee-fa1f8b72997f.png`
+);
 
 // app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
