@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const PostAuthor = () => {
+const PostAuthor = ({ createdAt, authorID }) => {
   return (
     <Link to={`/posts/users/vfdfv`} className="flex gap-4 mt-4 items-center">
       <div className="flex-shrink-0">

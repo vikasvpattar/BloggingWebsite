@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FaCheck, FaEdit } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { UserContext } from "../context/userContext";
 
 const UserProfile = () => {
   const [avatar, setAvatar] = useState("");
@@ -9,6 +10,16 @@ const UserProfile = () => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
+  const { currentUser } = useContext(UserContext);
+  const token = currentUser?.token;
+
+  const navigate = useNavigate();
+  // redirect to login page if the user is not logged in
+  useEffect(() => {
+    if (!token) {
+      navigate("/login");
+    }
+  });
 
   return (
     <section className="w-full max-w-md mt-8 p-4 mx-auto bg-white rounded-xl shadow-md">

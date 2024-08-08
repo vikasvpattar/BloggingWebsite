@@ -1,9 +1,20 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { DummyPosts } from "../data";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { UserContext } from "../context/userContext";
 
 const Dashboard = () => {
   const [posts, setPosts] = useState(DummyPosts);
+  const { currentUser } = useContext(UserContext);
+  const token = currentUser?.token;
+
+  const navigate = useNavigate();
+  // redirect to login page if the user is not logged in
+  useEffect(() => {
+    if (!token) {
+      navigate("/login");
+    }
+  });
   return (
     <section className="w-3/4 mx-auto mt-10 ">
       {posts.length > 0 ? (

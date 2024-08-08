@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Register = () => {
   const [userData, setUserData] = useState({
@@ -8,18 +9,39 @@ const Register = () => {
     password: "",
     password2: "",
   });
-
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
   const inputChangeHandler = (e) => {
     setUserData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
+  const BASE_URL = import.meta.env.VITE_APP_BASE_URL;
 
+  const registerUser = async (e) => {
+    e.preventDefault();
+    setError("");
+    try {
+      const response = await axios.post(`${BASE_URL}/users/register`, userData);
+      const newUser = await response.data;
+      console.log(newUser);
+      if (!newUser) {
+        setError("Couldn't register user. Please try again.");
+      }
+      navigate("/login");
+    } catch (error) {
+      setError(error.response.data.message);
+    }
+  };
   return (
     <section className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
       <div className="flex flex-col w-full max-w-md space-y-4 bg-white p-6 rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold text-center">Sign Up</h2>
-        <form className="flex flex-col space-y-4">
-          <p className="bg-red-500 text-white px-3 py-1 text-sm rounded-lg">
-            This is an error message
+        <form onSubmit={registerUser} className="flex flex-col space-y-4">
+          <p
+            className={`bg-red-500 text-white px-3 py-1 text-sm rounded-lg ${
+              error ? "" : "hidden"
+            }`}
+          >
+            {error}
           </p>
           <input
             className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
