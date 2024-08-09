@@ -3,14 +3,16 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { UserContext } from "../context/userContext";
 import { useNavigate } from "react-router-dom";
-
+import axios from "axios";
 const CreatePost = () => {
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("Uncategorized");
   const [description, setDescription] = useState("");
   const [thumbnail, setThumbnail] = useState("");
+  const [error, setError] = useState("");
   const { currentUser } = useContext(UserContext);
   const token = currentUser?.token;
+  const BASE_URL = import.meta.env.VITE_APP_BASE_URL;
 
   const navigate = useNavigate();
   // redirect to login page if the user is not logged in
@@ -19,6 +21,25 @@ const CreatePost = () => {
       navigate("/login");
     }
   });
+  const createPost = async (e) => {
+    e.preventDefault();
+    const postData = new FormData();
+    postData.set("title", title);
+    postData.set("category", category);
+    postData.set("description", description);
+    postData.set("thumbnail", thumbnail);
+    try {
+      const response = await axios.post(`${BASE_URL}/posts`, postData, {
+        withCredentials: true,
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (response.status == 201) {
+        return navigate("/");
+      }
+    } catch (error) {
+      setError(error.response.data.message);
+    }
+  };
   const modules = {
     toolbar: [
       [{ header: [1, 2, 3, 4, 5, 6, false] }],
@@ -64,10 +85,12 @@ const CreatePost = () => {
       <div className="flex flex-col gap-6">
         <h2 className="font-bold text-2xl sm:text-3xl">Create Post</h2>
         {/* Conditionally render the error message if needed */}
-        <p className="bg-red-500 text-white px-4 py-2 text-sm rounded-lg">
-          This is an error message
-        </p>
-        <form className="flex flex-col gap-6">
+        {error && (
+          <p className="bg-red-500 text-white px-4 py-2 text-sm rounded-lg">
+            {error}
+          </p>
+        )}
+        <form onSubmit={createPost} className="flex flex-col gap-6">
           <input
             className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             type="text"

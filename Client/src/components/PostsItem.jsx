@@ -30,7 +30,8 @@ const PostsItem = ({
             {postTitle}
           </h3>
         </Link>
-        <p className="mt-2 text-gray-600">{shortDesc}</p>
+        {/* <p className="mt-2 text-gray-600">{shortDesc}</p> */}
+        <p dangerouslySetInnerHTML={{ __html: shortDesc }}></p>
         <div className="flex justify-between items-center mt-4">
           <PostAuthor authorID={authorID} createdAt={createdAt} />
           <Link

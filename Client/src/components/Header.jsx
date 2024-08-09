@@ -16,7 +16,7 @@ const Header = () => {
   const renderNavLinks = () => {
     const links = currentUser?.id
       ? [
-          { to: "/profile/ada", label: "Michal" },
+          { to: `/profile/${currentUser.id}`, label: currentUser.name },
           { to: "/create", label: "Create Post" },
           { to: "/authors", label: "Author" },
           { to: "/logout", label: "Logout" },

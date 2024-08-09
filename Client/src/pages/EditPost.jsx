@@ -2,15 +2,19 @@ import React, { useContext, useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { UserContext } from "../context/userContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 
 const EditPost = () => {
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("Uncategorized");
   const [description, setDescription] = useState("");
   const [thumbnail, setThumbnail] = useState("");
+  const [error, setError] = useState("");
   const { currentUser } = useContext(UserContext);
   const token = currentUser?.token;
+  const { id } = useParams();
+  const BASE_URL = import.meta.env.VITE_APP_BASE_URL;
 
   const navigate = useNavigate();
   // redirect to login page if the user is not logged in
@@ -19,6 +23,37 @@ const EditPost = () => {
       navigate("/login");
     }
   });
+  useEffect(() => {
+    const getPost = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/posts/${id}`);
+        setTitle(response?.data.title);
+        setDescription(response?.data.description);
+      } catch (error) {
+        setError(error);
+      }
+    };
+    getPost();
+  }, []);
+  const editPost = async (e) => {
+    e.preventDefault();
+    const postData = new FormData();
+    postData.set("title", title);
+    postData.set("category", category);
+    postData.set("description", description);
+    postData.set("thumbnail", thumbnail);
+    try {
+      const response = await axios.patch(`${BASE_URL}/posts/${id}`, postData, {
+        withCredentials: true,
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (response.status == 200) {
+        return navigate("/");
+      }
+    } catch (error) {
+      setError(error.response.data.message);
+    }
+  };
   const modules = {
     toolbar: [
       [{ header: [1, 2, 3, 4, 5, 6, false] }],
@@ -60,10 +95,12 @@ const EditPost = () => {
     <section className="w-1/2 mx-auto mt-10">
       <div className="flex flex-col gap-4">
         <h2 className="font-bold text-xl">Edit post</h2>
-        <p className="bg-red-500 text-white px-3 py-1 text-sm rounded-lg">
-          This is an error message
-        </p>
-        <form action="" className="flex flex-col gap-4">
+        {error && (
+          <p className="bg-red-500 text-white px-3 py-1 text-sm rounded-lg">
+            {error}
+          </p>
+        )}
+        <form onSubmit={editPost} action="" className="flex flex-col gap-4">
           <input
             className="px-3 py-2 outline-none rounded-lg"
             type="text"
