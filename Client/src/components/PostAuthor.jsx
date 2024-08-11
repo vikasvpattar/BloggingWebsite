@@ -39,7 +39,7 @@ const PostAuthor = ({ createdAt, authorID }) => {
       </div>
       <div className="flex flex-col text-sm">
         <h5 className="font-semibold">{author?.name}</h5>
-        <small className="text-gray-500">
+        <small className="text-gray-400">
           <ReactTimeAgo date={new Date(createdAt)} locale="en-US" />
         </small>
       </div>

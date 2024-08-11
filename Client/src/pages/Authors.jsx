@@ -8,6 +8,7 @@ const BASE_URL = import.meta.env.VITE_APP_BASE_URL;
 const Authors = () => {
   const [authors, setAuthors] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     const getAuthors = async () => {
       setIsLoading(true);
@@ -21,17 +22,18 @@ const Authors = () => {
     };
     getAuthors();
   }, []);
+
   if (isLoading) {
     return <Loader />;
   }
 
   return (
-    <section className="px-4 py-8 md:px-8 md:py-12">
+    <section className="px-4 py-8 md:px-8 md:py-12 bg-slate-900 min-h-screen">
       {authors.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {authors.map(({ _id, avatar, name, posts }) => (
             <Link
-              className="bg-white rounded-xl p-4 flex items-center gap-4 transition ease-in-out delay-150 hover:shadow-lg"
+              className="bg-slate-800 rounded-xl p-4 flex items-center gap-4 transition ease-in-out delay-150 hover:shadow-lg hover:bg-slate-700"
               key={_id}
               to={`/posts/users/${_id}`}
             >
@@ -45,14 +47,14 @@ const Authors = () => {
                 />
               </div>
               <div>
-                <h4 className="text-lg font-semibold">{name}</h4>
-                <p className="text-sm text-gray-600">{posts} Posts</p>
+                <h4 className="text-lg font-semibold text-white">{name}</h4>
+                <p className="text-sm text-gray-400">{posts} Posts</p>
               </div>
             </Link>
           ))}
         </div>
       ) : (
-        <h2 className="text-center text-xl font-semibold mt-8">
+        <h2 className="text-center text-xl font-semibold mt-8 text-gray-400">
           No users or authors found.
         </h2>
       )}

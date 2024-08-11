@@ -5,6 +5,7 @@ import { UserContext } from "../context/userContext.jsx";
 import DeletePost from "./DeletePost.jsx";
 import Loader from "../components/Loader.jsx";
 import axios from "axios";
+
 const PostDetails = () => {
   const { id } = useParams();
   const [post, setPost] = useState(null);
@@ -12,59 +13,69 @@ const PostDetails = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { currentUser } = useContext(UserContext);
   const BASE_URL = import.meta.env.VITE_APP_BASE_URL;
+
   useEffect(() => {
     const getPost = async () => {
       setIsLoading(true);
       try {
         const response = await axios.get(`${BASE_URL}/posts/${id}`);
         setPost(response?.data);
-        setCreatorID(response?.data.creator);
       } catch (error) {
-        console.log(error);
+        setError(error.response?.data?.message || "An error occurred");
       }
       setIsLoading(false);
     };
     getPost();
-  }, []);
+  }, [id, BASE_URL]);
+
   if (isLoading) {
     return <Loader />;
   }
+
   return (
-    <section className="bg-white mx-auto p-4 rounded-xl max-w-full sm:max-w-md md:max-w-lg lg:max-w-2xl mt-6 sm:mt-8 md:mt-10 lg:mt-12">
-      {error && <p className="text-red-500">{error}</p>}
-      {post && (
-        <div>
-          <div className="space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-              <PostAuthor authorID={post.creator} createdAt={post.createdAt} />
-              {currentUser?.id == post.creator && (
-                <div className="flex gap-2 mt-2 sm:mt-0">
-                  <Link
-                    to={`/posts/${post?._id}/edit`}
-                    className="px-3 py-1 bg-blue-700 text-white rounded-md text-sm"
-                  >
-                    Edit
-                  </Link>
-                  <DeletePost postID={id} />
-                </div>
-              )}
+    <section className="flex items-center justify-center min-h-screen bg-gray-800 p-4">
+      <div className="w-full max-w-3xl bg-gray-900/60 backdrop-blur-md border border-gray-700 rounded-lg p-6 shadow-lg">
+        {error && <p className="text-red-500 mb-4">{error}</p>}
+        {post && (
+          <div>
+            <div className="space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                <PostAuthor
+                  authorID={post.creator}
+                  createdAt={post.createdAt}
+                />
+                {currentUser?.id === post.creator && (
+                  <div className="flex gap-2 mt-2 sm:mt-0">
+                    <Link
+                      to={`/posts/${post?._id}/edit`}
+                      className="px-3 py-1 bg-blue-700 text-white rounded-md text-sm hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      Edit
+                    </Link>
+                    <DeletePost postID={id} />
+                  </div>
+                )}
+              </div>
+              <h1 className="text-2xl font-bold text-white">{post.title}</h1>
+              <div className="relative w-full h-80">
+                <img
+                  src={`${import.meta.env.VITE_APP_ASSETS_URL}/uploads/${
+                    post.thumbnail
+                  }`}
+                  alt={post.title}
+                  className="absolute inset-0 w-full h-full object-cover rounded-lg"
+                />
+              </div>
             </div>
-            <h1 className="text-xl font-bold">{post.title}</h1>
-            <div className="">
-              <img
-                src={`${import.meta.env.VITE_APP_ASSETS_URL}/uploads/${
-                  post.thumbnail
-                }`}
-                alt=""
-                className=" inset-0 w-full h-full object-cover rounded-lg"
-              />
+            <div className="space-y-4 mt-4">
+              <p
+                className="text-white"
+                dangerouslySetInnerHTML={{ __html: post.description }}
+              ></p>
             </div>
           </div>
-          <div className="space-y-4 mt-4">
-            <p dangerouslySetInnerHTML={{ __html: post.description }}></p>
-          </div>
-        </div>
-      )}
+        )}
+      </div>
     </section>
   );
 };

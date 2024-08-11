@@ -22,7 +22,6 @@ const Register = () => {
     try {
       const response = await axios.post(`${BASE_URL}/users/register`, userData);
       const newUser = await response.data;
-      console.log(newUser);
       if (!newUser) {
         setError("Couldn't register user. Please try again.");
       }
@@ -31,10 +30,11 @@ const Register = () => {
       setError(error.response.data.message);
     }
   };
+
   return (
-    <section className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
-      <div className="flex flex-col w-full max-w-md space-y-4 bg-white p-6 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-bold text-center">Sign Up</h2>
+    <section className="flex items-center justify-center min-h-screen bg-gray-800 p-4">
+      <div className="flex flex-col w-full max-w-md p-6 rounded-lg shadow-lg bg-gray-900/60 backdrop-blur-md border border-gray-700">
+        <h2 className="text-2xl font-bold text-center text-white">Sign Up</h2>
         <form onSubmit={registerUser} className="flex flex-col space-y-4">
           <p
             className={`bg-red-500 text-white px-3 py-1 text-sm rounded-lg ${
@@ -44,7 +44,7 @@ const Register = () => {
             {error}
           </p>
           <input
-            className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-3 py-2 border border-gray-700 rounded-lg bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             type="text"
             name="name"
             id="name"
@@ -53,7 +53,7 @@ const Register = () => {
             onChange={inputChangeHandler}
           />
           <input
-            className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-3 py-2 border border-gray-700 rounded-lg bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             type="email"
             name="email"
             id="email"
@@ -62,7 +62,7 @@ const Register = () => {
             onChange={inputChangeHandler}
           />
           <input
-            className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-3 py-2 border border-gray-700 rounded-lg bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             type="password"
             name="password"
             id="password"
@@ -71,7 +71,7 @@ const Register = () => {
             onChange={inputChangeHandler}
           />
           <input
-            className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-3 py-2 border border-gray-700 rounded-lg bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             type="password"
             name="password2"
             id="password2"
@@ -81,14 +81,14 @@ const Register = () => {
           />
           <button
             type="submit"
-            className="px-4 py-2 bg-blue-700 rounded-lg text-white hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 self-center"
+            className="px-4 py-2 bg-blue-700 w-full rounded-lg text-white hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 self-center"
           >
             Register
           </button>
         </form>
-        <small className="text-center">
+        <small className="text-center text-white mt-6">
           Already have an account?{" "}
-          <Link to="/login" className="text-blue-700 hover:underline">
+          <Link to="/login" className="text-blue-400 hover:underline">
             Sign In
           </Link>
         </small>

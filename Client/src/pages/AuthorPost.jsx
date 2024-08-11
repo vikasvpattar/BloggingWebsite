@@ -9,7 +9,7 @@ const AuthorPost = () => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const BASE_URL = import.meta.env.VITE_APP_BASE_URL;
-  const {id}=useParams()
+  const { id } = useParams();
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -29,7 +29,7 @@ const AuthorPost = () => {
     return <Loader />;
   }
   return (
-    <section className="p-4 bg-gray-100 min-h-screen">
+    <section className="p-4  min-h-screen">
       {posts.length > 0 ? (
         <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           {posts.map(

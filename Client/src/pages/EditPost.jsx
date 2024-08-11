@@ -92,17 +92,19 @@ const EditPost = () => {
     "Weather",
   ];
   return (
-    <section className="w-1/2 mx-auto mt-10">
+    <section className="w-full max-w-4xl mx-auto mt-8 px-4 py-4 sm:p-6 md:p-8 lg:p-10 rounded-lg bg-slate-800 ">
       <div className="flex flex-col gap-4">
-        <h2 className="font-bold text-xl">Edit post</h2>
+        <h2 className="font-bold text-xl ">Edit post</h2>
         {error && (
-          <p className="bg-red-500 text-white px-3 py-1 text-sm rounded-lg">
-            {error}
-          </p>
+          <p className="bg-red-500 px-3 py-1 text-sm rounded-lg">{error}</p>
         )}
-        <form onSubmit={editPost} action="" className="flex flex-col gap-4">
+        <form
+          onSubmit={editPost}
+          action=""
+          className="flex flex-col gap-4 text-black"
+        >
           <input
-            className="px-3 py-2 outline-none rounded-lg"
+            className="px-4 py-3 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             type="text"
             placeholder="Title"
             value={title}
@@ -110,7 +112,7 @@ const EditPost = () => {
             autoFocus
           />
           <select
-            className="px-3 py-2 outline-none rounded-lg"
+            className="px-4 py-3 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
           >
@@ -119,7 +121,7 @@ const EditPost = () => {
             ))}
           </select>
           <ReactQuill
-            className="bg-white h-40 overflow-scroll"
+            className="bg-white rounded-lg h-64 overflow-auto"
             modules={modules}
             formats={formats}
             value={description}
@@ -127,11 +129,12 @@ const EditPost = () => {
           />
           <input
             type="file"
+            className="border border-slate-600 px-4 py-3 rounded-lg text-white"
             onChange={(e) => setThumbnail(e.target.files[0])}
             accept="jpg, png, jpeg"
           />
           <button
-            className="px-3 py-2 bg-blue-700 rounded-lg text-white w-1/3 self-center	"
+            className="px-6 py-3 bg-blue-700 rounded-lg text-white w-full sm:w-auto self-center hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
             type="submit"
           >
             Update post

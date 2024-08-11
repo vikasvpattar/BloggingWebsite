@@ -40,13 +40,13 @@ const Dashboard = () => {
     return <Loader />;
   }
   return (
-    <section className="w-3/4 mx-auto mt-10 ">
+    <section className="w-3/4 mx-auto mt-10 min-h-[70vh] ">
       {posts.length > 0 ? (
         <div className="flex flex-col gap-3">
           {posts.map((post) => {
             return (
               <article
-                className=" p-3 bg-white flex gap-2 items-center justify-between  rounded-xl"
+                className=" p-3 bg-slate-800/60 backdrop-blur-md hover:bg-slate-800 border-slate-700  flex gap-2 items-center justify-between  rounded-xl"
                 key={post._id}
               >
                 <div className="flex gap-2 items-center">
@@ -74,7 +74,12 @@ const Dashboard = () => {
                   >
                     Edit
                   </Link>
-               
+                  <Link
+                    className="px-4 py-1 text-white rounded-xl bg-red-400"
+                    to={`/posts/${post._id}/delete`}
+                  >
+                    Delete
+                  </Link>
                   <DeletePost postID={post._id}>Delete</DeletePost>
                 </div>
               </article>

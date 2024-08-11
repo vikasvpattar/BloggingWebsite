@@ -19,12 +19,13 @@ const UserProfile = () => {
   const { id } = useParams();
 
   const navigate = useNavigate();
-  // redirect to login page if the user is not logged in
+
   useEffect(() => {
     if (!token) {
       navigate("/login");
     }
   }, []);
+
   useEffect(() => {
     const getUser = async () => {
       const response = await axios.get(`${BASE_URL}/users/${id}`, {
@@ -38,6 +39,7 @@ const UserProfile = () => {
     };
     getUser();
   }, []);
+
   const changeAvatarHandler = async () => {
     setIsAvatarTouched(false);
     try {
@@ -53,6 +55,7 @@ const UserProfile = () => {
       console.log(error);
     }
   };
+
   const updateUserDetails = async (e) => {
     e.preventDefault();
     try {
@@ -62,12 +65,12 @@ const UserProfile = () => {
       userData.set("currentPassword", currentPassword);
       userData.set("newPassword", newPassword);
       userData.set("confirmNewPassword", confirmNewPassword);
-      const resposne = await axios.patch(
+      const response = await axios.patch(
         `${BASE_URL}/users/edit-user`,
         userData,
         { withCredentials: true, headers: { Authorization: `Bearer ${token}` } }
       );
-      if (resposne.status == 200) {
+      if (response.status === 200) {
         navigate("/logout");
       }
     } catch (error) {
@@ -76,11 +79,11 @@ const UserProfile = () => {
   };
 
   return (
-    <section className="w-full max-w-md mt-8 p-4 mx-auto bg-white rounded-xl shadow-md">
+    <section className="w-full max-w-md mt-8 p-4 mx-auto bg-slate-800/60 backdrop-blur-md rounded-xl shadow-md border border-slate-700">
       <div className="flex flex-col items-center space-y-4">
         <Link
           to={`/myposts/${currentUser?.id}`}
-          className="bg-blue-700 text-white px-4 py-2 rounded-full text-sm font-semibold"
+          className="bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-blue-700 transition-colors duration-200"
         >
           My posts
         </Link>
@@ -103,7 +106,7 @@ const UserProfile = () => {
             />
             <label
               onClick={() => setIsAvatarTouched(true)}
-              className="bg-blue-700 text-white absolute right-1  bottom-0 rounded-full size-8 grid place-items-center"
+              className="bg-blue-600 text-white absolute right-1 bottom-0 rounded-full size-8 grid place-items-center cursor-pointer"
               htmlFor="avatar"
             >
               <FaEdit size={16} />
@@ -111,14 +114,14 @@ const UserProfile = () => {
             {isAvatarTouched && (
               <button
                 onClick={changeAvatarHandler}
-                className="bg-blue-700 text-white absolute right-1  bottom-0 rounded-full size-8 grid place-items-center"
+                className="bg-blue-600 text-white absolute right-1 bottom-0 rounded-full size-8 grid place-items-center"
               >
                 <FaCheck size={16} />
               </button>
             )}
           </form>
         </div>
-        <h1 className="font-bold text-xl">{currentUser.name}</h1>
+        <h1 className="font-bold text-xl text-gray-100">{currentUser.name}</h1>
         <form
           onSubmit={updateUserDetails}
           className="w-full flex flex-col gap-4"
@@ -129,42 +132,42 @@ const UserProfile = () => {
             </p>
           )}
           <input
-            className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-4 py-2 border border-gray-600 rounded-lg bg-gray-700 text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
             type="text"
             placeholder="Full Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
           <input
-            className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-4 py-2 border border-gray-600 rounded-lg bg-gray-700 text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
             type="email"
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
           <input
-            className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-4 py-2 border border-gray-600 rounded-lg bg-gray-700 text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
             type="password"
             placeholder="Current password"
             value={currentPassword}
             onChange={(e) => setCurrentPassword(e.target.value)}
           />
           <input
-            className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-4 py-2 border border-gray-600 rounded-lg bg-gray-700 text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
             type="password"
             placeholder="New password"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
           />
           <input
-            className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-4 py-2 border border-gray-600 rounded-lg bg-gray-700 text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
             type="password"
             placeholder="Confirm new password"
             value={confirmNewPassword}
             onChange={(e) => setConfirmNewPassword(e.target.value)}
           />
           <button
-            className="px-4 py-2 bg-blue-700 rounded-lg text-white font-semibold self-center"
+            className="px-4 py-2 bg-blue-600 rounded-lg text-white font-semibold self-center hover:bg-blue-700 transition-colors duration-200"
             type="submit"
           >
             Update Details

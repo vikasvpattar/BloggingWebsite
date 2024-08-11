@@ -4,6 +4,7 @@ import "react-quill/dist/quill.snow.css";
 import { UserContext } from "../context/userContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+
 const CreatePost = () => {
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("Uncategorized");
@@ -15,12 +16,14 @@ const CreatePost = () => {
   const BASE_URL = import.meta.env.VITE_APP_BASE_URL;
 
   const navigate = useNavigate();
-  // redirect to login page if the user is not logged in
+
+  // Redirect to login page if the user is not logged in
   useEffect(() => {
     if (!token) {
       navigate("/login");
     }
-  });
+  }, [token, navigate]);
+
   const createPost = async (e) => {
     e.preventDefault();
     const postData = new FormData();
@@ -28,18 +31,20 @@ const CreatePost = () => {
     postData.set("category", category);
     postData.set("description", description);
     postData.set("thumbnail", thumbnail);
+
     try {
       const response = await axios.post(`${BASE_URL}/posts`, postData, {
         withCredentials: true,
         headers: { Authorization: `Bearer ${token}` },
       });
-      if (response.status == 201) {
-        return navigate("/");
+      if (response.status === 201) {
+        navigate("/");
       }
     } catch (error) {
-      setError(error.response.data.message);
+      setError(error.response?.data?.message || "An error occurred");
     }
   };
+
   const modules = {
     toolbar: [
       [{ header: [1, 2, 3, 4, 5, 6, false] }],
@@ -81,7 +86,7 @@ const CreatePost = () => {
   ];
 
   return (
-    <section className="w-full max-w-3xl mx-auto mt-8 px-4 sm:px-6 lg:px-8">
+    <section className="w-full max-w-4xl mx-auto mt-8 px-4 py-4 sm:p-6 md:p-8 lg:p-10 rounded-lg bg-slate-800 text-white">
       <div className="flex flex-col gap-6">
         <h2 className="font-bold text-2xl sm:text-3xl">Create Post</h2>
         {/* Conditionally render the error message if needed */}
@@ -90,9 +95,9 @@ const CreatePost = () => {
             {error}
           </p>
         )}
-        <form onSubmit={createPost} className="flex flex-col gap-6">
+        <form  onSubmit={createPost} className="flex flex-col text-black gap-6">
           <input
-            className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-4 py-3 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             type="text"
             placeholder="Title"
             value={title}
@@ -100,7 +105,7 @@ const CreatePost = () => {
             autoFocus
           />
           <select
-            className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-4 py-3 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
           >
@@ -111,7 +116,7 @@ const CreatePost = () => {
             ))}
           </select>
           <ReactQuill
-            className="bg-white h-64 overflow-auto"
+            className="bg-white rounded-lg h-64 overflow-auto"
             modules={modules}
             formats={formats}
             value={description}
@@ -119,12 +124,12 @@ const CreatePost = () => {
           />
           <input
             type="file"
-            className="border px-4 py-2 rounded-lg"
+            className="border border-slate-600 px-4 py-3 rounded-lg text-white"
             onChange={(e) => setThumbnail(e.target.files[0])}
             accept="image/jpg, image/png, image/jpeg"
           />
           <button
-            className="px-6 py-2 bg-blue-700 rounded-lg text-white w-full sm:w-auto self-center hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-6 py-3 bg-blue-700 rounded-lg text-white w-full sm:w-auto self-center hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
             type="submit"
           >
             Create Post
