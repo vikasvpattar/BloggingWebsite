@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import { DummyPosts } from "../data";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { UserContext } from "../context/userContext";
 import axios from "axios";
@@ -14,12 +13,14 @@ const Dashboard = () => {
   const token = currentUser?.token;
   const { id } = useParams();
   const navigate = useNavigate();
-  // redirect to login page if the user is not logged in
+
+  // Redirect to login page if the user is not logged in
   useEffect(() => {
     if (!token) {
       navigate("/login");
     }
-  }, []);
+  }, [token, navigate]);
+
   useEffect(() => {
     const fetchPosts = async () => {
       setIsLoading(true);
@@ -35,59 +36,55 @@ const Dashboard = () => {
       setIsLoading(false);
     };
     fetchPosts();
-  }, []);
+  }, [id, token]);
+
   if (isLoading) {
     return <Loader />;
   }
+
   return (
-    <section className="w-3/4 mx-auto mt-10 min-h-[70vh] ">
+    <section className="w-11/12 sm:w-3/4 mx-auto mt-10 min-h-[70vh]">
       {posts.length > 0 ? (
-        <div className="flex flex-col gap-3">
-          {posts.map((post) => {
-            return (
-              <article
-                className=" p-3 bg-slate-800/60 backdrop-blur-md hover:bg-slate-800 border-slate-700  flex gap-2 items-center justify-between  rounded-xl"
-                key={post._id}
-              >
-                <div className="flex gap-2 items-center">
-                  <div className="size-16 rounded-xl overflow-hidden">
-                    <img
-                      className="object-cover size-full"
-                      src={`${import.meta.env.VITE_APP_ASSETS_URL}/uploads/${
-                        post.thumbnail
-                      }`}
-                      alt={post.title}
-                    />
-                  </div>
-                  <h5>{post.title}</h5>
+        <div className="flex flex-col gap-4">
+          {posts.map((post) => (
+            <article
+              className="p-4 bg-slate-800/60 backdrop-blur-md hover:bg-slate-800 border border-slate-700 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between rounded-xl flex-wrap"
+              key={post._id}
+            >
+              <div className="flex items-center gap-4 w-full sm:w-auto flex-grow">
+                <div className="w-16 h-16 min-w-[4rem] rounded-xl overflow-hidden flex-shrink-0">
+                  <img
+                    className="object-cover w-full h-full"
+                    src={`${import.meta.env.VITE_APP_ASSETS_URL}/uploads/${
+                      post.thumbnail
+                    }`}
+                    alt={post.title}
+                  />
                 </div>
-                <div className="flex gap-2">
-                  <Link
-                    className="px-4 py-1 text-white rounded-xl bg-gray-400"
-                    to={`/posts/${post._id}`}
-                  >
-                    View
-                  </Link>
-                  <Link
-                    className="px-4 py-1 text-white rounded-xl bg-blue-400"
-                    to={`/posts/${post._id}/edit`}
-                  >
-                    Edit
-                  </Link>
-                  <Link
-                    className="px-4 py-1 text-white rounded-xl bg-red-400"
-                    to={`/posts/${post._id}/delete`}
-                  >
-                    Delete
-                  </Link>
-                  <DeletePost postID={post._id}>Delete</DeletePost>
-                </div>
-              </article>
-            );
-          })}
+                <h5 className="text-white text-lg truncate  flex-grow">
+                  {post.title}
+                </h5>
+              </div>
+              <div className="flex gap-3 mt-4 sm:mt-0 sm:ml-auto flex-wrap">
+                <Link
+                  className="px-4 py-1 text-gray-900 rounded-xl bg-gray-400 hover:bg-gray-500"
+                  to={`/posts/${post._id}`}
+                >
+                  View
+                </Link>
+                <Link
+                  className="px-4 py-1 text-white rounded-xl bg-blue-500 hover:bg-blue-600"
+                  to={`/posts/${post._id}/edit`}
+                >
+                  Edit
+                </Link>
+                <DeletePost postID={post._id}>Delete</DeletePost>
+              </div>
+            </article>
+          ))}
         </div>
       ) : (
-        <h2>No posts are there</h2>
+        <h2 className="text-white text-center mt-10">No posts are there</h2>
       )}
     </section>
   );

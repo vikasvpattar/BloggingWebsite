@@ -14,17 +14,17 @@ const PostsItem = ({
   const shortDesc =
     description.length > 145 ? description.substr(0, 145) + "..." : description;
   const postTitle = title.length > 30 ? title.substr(0, 30) + "..." : title;
-  const removeExtraSpaceBetweenTags = (html) => {
-    // Removes empty paragraphs and trims whitespace between tags
 
+  const removeExtraSpaceBetweenTags = (html) => {
     return html
-      .replace(/<p>/g, '<span style="display:inline;">') // Convert <p> to inline
-      .replace(/<\/p>/g, "</span>") // Close <span>
-      .replace(/<h[1-6]>/g, '<span style="display:inline; font-weight:bold;">') // Convert <h1>-<h6> to inline with bold
-      .replace(/<\/h[1-6]>/g, "</span>"); // Close <span>
+      .replace(/<p>/g, '<span style="display:inline;">')
+      .replace(/<\/p>/g, "</span>")
+      .replace(/<h[1-6]>/g, '<span style="display:inline; font-weight:bold;">')
+      .replace(/<\/h[1-6]>/g, "</span>");
   };
+
   return (
-    <article className="bg-slate-800/60 backdrop-blur-md border-slate-700 p-4 pb-8 rounded-lg shadow-sm hover:bg-slate-800 transition-shadow duration-200 border max-w-full overflow-hidden">
+    <article className="bg-slate-800/60 backdrop-blur-md border-slate-700 p-4 rounded-lg shadow-sm hover:bg-slate-800 transition-shadow duration-200 border max-w-full overflow-hidden flex flex-col h-full">
       <div className="rounded-md h-48 sm:h-64 overflow-hidden w-full">
         <img
           className="w-full h-full object-cover"
@@ -32,14 +32,14 @@ const PostsItem = ({
           alt={title}
         />
       </div>
-      <div className="mt-4">
+      <div className="flex flex-col flex-grow mt-4">
         <Link to={`/posts/${postID}`}>
           <h3 className="text-lg font-bold hover:text-emerald-400 text-blue-600 transition-colors duration-200 break-words">
             {postTitle}
           </h3>
         </Link>
         <p
-          className="break-words"
+          className="break-words flex-grow"
           dangerouslySetInnerHTML={{
             __html: removeExtraSpaceBetweenTags(shortDesc),
           }}
