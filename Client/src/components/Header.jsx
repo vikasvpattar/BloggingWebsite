@@ -42,7 +42,7 @@ const Header = () => {
 
   return (
     <header className="w-full fixed top-0 left-0 z-10 bg-slate-800 bg-opacity-50 backdrop-filter backdrop-blur-sm border-b border-slate-600 border-opacity-60">
-      <nav className="flex justify-between items-center h-16 px-4 md:px-6 lg:px-8">
+      <nav className="flex justify-between items-center h-16 px-4 md:px-6 lg:px-8 ">
         <Link to="/">
           <img className="w-32 md:w-40" src={logo} alt="Dev Blogs" />
         </Link>

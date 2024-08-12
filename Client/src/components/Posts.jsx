@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import PostsItem from "./PostsItem";
-
 import axios from "axios";
 import Loader from "./Loader.jsx";
 
@@ -24,12 +23,14 @@ const Posts = () => {
     };
     fetchPosts();
   }, []);
+
   if (isLoading) {
     return <Loader />;
   }
 
   return (
-    <section className="p-4 min-h-screen">
+    <section className=" p-4 min-h-screen ">
+      {/* Add background color to make padding more visible */}
       {posts.length > 0 ? (
         <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           {posts.map(

@@ -28,7 +28,7 @@ const PostAuthor = ({ createdAt, authorID }) => {
       to={`/posts/users/${authorID}`}
       className="flex gap-4 mt-4 items-center"
     >
-      <div className="flex-shrink-0">
+      <div className="">
         <img
           src={`${import.meta.env.VITE_APP_ASSETS_URL}/uploads/${
             author?.avatar
