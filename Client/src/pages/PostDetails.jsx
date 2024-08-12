@@ -33,8 +33,8 @@ const PostDetails = () => {
   }
 
   return (
-    <section className="flex items-center justify-center min-h-screen bg-gray-800 p-4">
-      <div className="w-full max-w-3xl bg-gray-900/60 backdrop-blur-md border border-gray-700 rounded-lg p-6 shadow-lg">
+    <section className="flex items-center justify-center min-h-screen  p-4">
+      <div className="w-full max-w-3xl bg-gray-800 backdrop-blur-md border border-gray-700 rounded-lg p-6 shadow-lg">
         {error && <p className="text-red-500 mb-4">{error}</p>}
         {post && (
           <div>
@@ -56,7 +56,9 @@ const PostDetails = () => {
                   </div>
                 )}
               </div>
-              <h1 className="text-2xl font-bold text-white">{post.title}</h1>
+              <h1 className="text-2xl font-bold text-white break-words">
+                {post.title}
+              </h1>
               <div className="relative w-full h-80">
                 <img
                   src={`${import.meta.env.VITE_APP_ASSETS_URL}/uploads/${
@@ -69,7 +71,7 @@ const PostDetails = () => {
             </div>
             <div className="space-y-4 mt-4">
               <p
-                className="text-white"
+                className="text-white break-words overflow-hidden custom-content"
                 dangerouslySetInnerHTML={{ __html: post.description }}
               ></p>
             </div>
