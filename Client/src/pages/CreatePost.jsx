@@ -4,6 +4,7 @@ import "react-quill/dist/quill.snow.css";
 import { UserContext } from "../context/userContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const CreatePost = () => {
   const [title, setTitle] = useState("");
@@ -24,26 +25,6 @@ const CreatePost = () => {
     }
   }, [token, navigate]);
 
-  // const createPost = async (e) => {
-  //   e.preventDefault();
-  //   const postData = new FormData();
-  //   postData.set("title", title);
-  //   postData.set("category", category);
-  //   postData.set("description", description);
-  //   postData.set("thumbnail", thumbnail);
-
-  //   try {
-  //     const response = await axios.post(`${BASE_URL}/posts`, postData, {
-  //       withCredentials: true,
-  //       headers: { Authorization: `Bearer ${token}` },
-  //     });
-  //     if (response.status === 201) {
-  //       navigate("/");
-  //     }
-  //   } catch (error) {
-  //     setError(error.response?.data?.message || "An error occurred");
-  //   }
-  // };
   const createPost = async (e) => {
     e.preventDefault();
 
@@ -63,10 +44,12 @@ const CreatePost = () => {
       });
 
       if (response.status === 201) {
+             toast.success("Succesfully created the post");
         navigate("/");
       }
     } catch (err) {
       console.error("Error creating post:", err);
+      toast.error("Error while creating the post")
     }
   };
 

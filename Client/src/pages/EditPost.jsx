@@ -4,6 +4,7 @@ import "react-quill/dist/quill.snow.css";
 import { UserContext } from "../context/userContext";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const EditPost = () => {
   const [title, setTitle] = useState("");
@@ -14,6 +15,7 @@ const EditPost = () => {
   const { currentUser } = useContext(UserContext);
   const token = currentUser?.token;
   const { id } = useParams();
+  
   const BASE_URL = import.meta.env.VITE_APP_BASE_URL;
 
   const navigate = useNavigate();
@@ -48,10 +50,12 @@ const EditPost = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.status == 200) {
+             toast.success("Succesfully updated the post");
         return navigate("/");
       }
     } catch (error) {
       setError(error.response.data.message);
+           toast.error(error.response.data.message);
     }
   };
   const modules = {

@@ -18,6 +18,8 @@ import ErrorPage from "./pages/ErrorPage.jsx";
 import Register from "./pages/Register.jsx";
 import Logout from "./pages/Logout.jsx";
 import UserProvider from "./context/userContext.jsx";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +27,7 @@ const router = createBrowserRouter([
     element: (
       <UserProvider>
         <Layout />
+        <ToastContainer />
       </UserProvider>
     ),
     errorElement: <ErrorPage />,

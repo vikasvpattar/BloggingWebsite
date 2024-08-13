@@ -3,6 +3,7 @@ import PostsItem from "../components/PostsItem.jsx";
 import axios from "axios";
 import Loader from "../components/Loader.jsx";
 import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const AuthorPost = () => {
   const [posts, setPosts] = useState([]);
@@ -20,6 +21,7 @@ const AuthorPost = () => {
         setPosts(response?.data);
       } catch (error) {
         setError(error.response.data.message);
+        toast.error(error.response.data.message);
       }
       setIsLoading(false);
     };

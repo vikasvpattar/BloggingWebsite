@@ -3,6 +3,7 @@ import { FaCheck, FaEdit } from "react-icons/fa";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { UserContext } from "../context/userContext";
 import axios from "axios";
+import { toast } from "react-toastify";
 const BASE_URL = import.meta.env.VITE_APP_BASE_URL;
 
 const UserProfile = () => {
@@ -51,8 +52,10 @@ const UserProfile = () => {
         { withCredentials: true, headers: { Authorization: `Bearer ${token}` } }
       );
       setAvatar(response?.data.avatar);
+      toast.success("Succesfully changed the avatar");
     } catch (error) {
       console.log(error);
+      toast.error("Succesfully Registered");
     }
   };
 
@@ -71,10 +74,12 @@ const UserProfile = () => {
         { withCredentials: true, headers: { Authorization: `Bearer ${token}` } }
       );
       if (response.status === 200) {
+        toast.success("Succesfully updated the user details");
         navigate("/logout");
       }
     } catch (error) {
       setError(error.response.data.message);
+      toast.error(error.response.data.message);
     }
   };
 

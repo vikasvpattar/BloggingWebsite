@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { UserContext } from "../context/userContext";
 import axios from "axios";
 import Loader from "../components/Loader";
+import { toast } from "react-toastify";
 const BASE_URL = import.meta.env.VITE_APP_BASE_URL;
 
 const DeletePost = ({ postID }) => {
@@ -24,6 +25,7 @@ const DeletePost = ({ postID }) => {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.status == 200) {
+        toast.success("Succesfully deleted the post");
         if (location.pathname == `/myposts/${currentUser.id}`) {
           navigate(0);
         } else {
@@ -33,6 +35,7 @@ const DeletePost = ({ postID }) => {
       setIsLoading(false);
     } catch (error) {
       console.log("Couldn't delete the post.");
+      toast.error("Couldn't delete the post");
     }
   };
   if (isLoading) {
