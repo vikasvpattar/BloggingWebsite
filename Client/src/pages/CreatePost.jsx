@@ -24,24 +24,49 @@ const CreatePost = () => {
     }
   }, [token, navigate]);
 
+  // const createPost = async (e) => {
+  //   e.preventDefault();
+  //   const postData = new FormData();
+  //   postData.set("title", title);
+  //   postData.set("category", category);
+  //   postData.set("description", description);
+  //   postData.set("thumbnail", thumbnail);
+
+  //   try {
+  //     const response = await axios.post(`${BASE_URL}/posts`, postData, {
+  //       withCredentials: true,
+  //       headers: { Authorization: `Bearer ${token}` },
+  //     });
+  //     if (response.status === 201) {
+  //       navigate("/");
+  //     }
+  //   } catch (error) {
+  //     setError(error.response?.data?.message || "An error occurred");
+  //   }
+  // };
   const createPost = async (e) => {
     e.preventDefault();
+
     const postData = new FormData();
-    postData.set("title", title);
-    postData.set("category", category);
-    postData.set("description", description);
-    postData.set("thumbnail", thumbnail);
+    postData.append("title", title);
+    postData.append("category", category);
+    postData.append("description", description);
+    postData.append("thumbnail", thumbnail);
 
     try {
       const response = await axios.post(`${BASE_URL}/posts`, postData, {
         withCredentials: true,
-        headers: { Authorization: `Bearer ${token}` },
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
       });
+
       if (response.status === 201) {
         navigate("/");
       }
-    } catch (error) {
-      setError(error.response?.data?.message || "An error occurred");
+    } catch (err) {
+      console.error("Error creating post:", err);
     }
   };
 
@@ -95,7 +120,12 @@ const CreatePost = () => {
             {error}
           </p>
         )}
-        <form  onSubmit={createPost} className="flex flex-col text-black gap-6">
+        <form
+          encType="multipart/form-data"
+          method="post"
+          onSubmit={createPost}
+          className="flex flex-col text-black gap-6"
+        >
           <input
             className="px-4 py-3 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             type="text"
@@ -124,6 +154,7 @@ const CreatePost = () => {
           />
           <input
             type="file"
+            name="thumbnail"
             className="border border-slate-600 px-4 py-3 rounded-lg text-white"
             onChange={(e) => setThumbnail(e.target.files[0])}
             accept="image/jpg, image/png, image/jpeg"

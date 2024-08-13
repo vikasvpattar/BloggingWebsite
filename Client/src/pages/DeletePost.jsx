@@ -15,7 +15,7 @@ const DeletePost = ({ postID }) => {
     if (!token) {
       navigate("/login");
     }
-  });
+  }, []);
   const removePost = async (id) => {
     setIsLoading(true);
     try {
@@ -35,8 +35,8 @@ const DeletePost = ({ postID }) => {
       console.log("Couldn't delete the post.");
     }
   };
-  if(isLoading){
-    return <Loader/>
+  if (isLoading) {
+    return <Loader />;
   }
   return (
     <Link

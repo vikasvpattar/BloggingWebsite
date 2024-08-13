@@ -22,7 +22,7 @@ const EditPost = () => {
     if (!token) {
       navigate("/login");
     }
-  });
+  }, []);
   useEffect(() => {
     const getPost = async () => {
       try {

@@ -61,9 +61,7 @@ const PostDetails = () => {
               </h1>
               <div className="relative w-full h-80">
                 <img
-                  src={`${import.meta.env.VITE_APP_ASSETS_URL}/uploads/${
-                    post.thumbnail
-                  }`}
+                  src={post.thumbnail}
                   alt={post.title}
                   className="absolute inset-0 w-full h-full object-cover rounded-lg"
                 />

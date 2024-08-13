@@ -28,7 +28,7 @@ const PostsItem = ({
       <div className="rounded-md h-48 sm:h-64 overflow-hidden w-full">
         <img
           className="w-full h-full object-cover"
-          src={`${import.meta.env.VITE_APP_ASSETS_URL}/uploads/${thumbnail}`}
+          src={thumbnail}
           alt={title}
         />
       </div>

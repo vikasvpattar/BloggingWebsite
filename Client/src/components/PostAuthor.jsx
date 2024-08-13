@@ -22,7 +22,7 @@ const PostAuthor = ({ createdAt, authorID }) => {
       }
     };
     getAuthor();
-  });
+  }, []);
   return (
     <Link
       to={`/posts/users/${authorID}`}
