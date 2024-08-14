@@ -4,6 +4,7 @@ import "react-quill/dist/quill.snow.css";
 import { UserContext } from "../context/userContext";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import Loader from "../components/Loader";
 import { toast } from "react-toastify";
 
 const EditPost = () => {
@@ -12,6 +13,7 @@ const EditPost = () => {
   const [description, setDescription] = useState("");
   const [thumbnail, setThumbnail] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const { currentUser } = useContext(UserContext);
   const token = currentUser?.token;
   const { id } = useParams();
@@ -27,6 +29,7 @@ const EditPost = () => {
   }, []);
   useEffect(() => {
     const getPost = async () => {
+      setIsLoading(true);
       try {
         const response = await axios.get(`${BASE_URL}/posts/${id}`);
         setTitle(response?.data.title);
@@ -34,33 +37,13 @@ const EditPost = () => {
       } catch (error) {
         setError(error);
       }
+      setIsLoading(false);
     };
     getPost();
   }, []);
-  // const editPost = async (e) => {
-  //   e.preventDefault();
-  //   const postData = new FormData();
-  //   postData.set("title", title);
-  //   postData.set("category", category);
-  //   postData.set("description", description);
-  //   postData.set("thumbnail", thumbnail);
-  //   try {
-  //     const response = await axios.patch(`${BASE_URL}/posts/${id}`, postData, {
-  //       withCredentials: true,
-  //       headers: { Authorization: `Bearer ${token}` },
-  //     });
-  //     if (response.status == 200) {
-  //       toast.success("Succesfully updated the post");
-  //       return navigate("/");
-  //     }
-  //   } catch (error) {
-  //     setError(error.response.data.message);
-  //     toast.error(error.response.data.message);
-  //   }
-  // };
   const editPost = async (e) => {
     e.preventDefault();
-
+    setIsLoading(true);
     if (!title || !category || !description) {
       setError("Please fill in all required fields.");
       return;
@@ -89,8 +72,11 @@ const EditPost = () => {
       setError(error.response?.data?.message || "Failed to update post.");
       toast.error(error.response?.data?.message || "Failed to update post.");
     }
+    setIsLoading(false);
   };
-
+  if (isLoading) {
+    return <Loader />;
+  }
   const modules = {
     toolbar: [
       [{ header: [1, 2, 3, 4, 5, 6, false] }],
