@@ -23,6 +23,7 @@ const PostAuthor = ({ createdAt, authorID }) => {
     };
     getAuthor();
   }, []);
+
   return (
     <Link
       to={`/posts/users/${authorID}`}
@@ -30,9 +31,7 @@ const PostAuthor = ({ createdAt, authorID }) => {
     >
       <div className="">
         <img
-          src={`${import.meta.env.VITE_APP_ASSETS_URL}/uploads/${
-            author?.avatar
-          }`}
+          src={author?.avatar}
           alt="Author"
           className="w-8 h-8 rounded-full object-cover"
         />

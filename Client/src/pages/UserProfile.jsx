@@ -55,7 +55,7 @@ const UserProfile = () => {
       toast.success("Succesfully changed the avatar");
     } catch (error) {
       console.log(error);
-      toast.error("Succesfully Registered");
+      toast.error(error);
     }
   };
 
@@ -95,7 +95,7 @@ const UserProfile = () => {
         <div className="relative flex flex-col items-center">
           <div className="relative rounded-full overflow-hidden w-32 h-32 sm:w-40 sm:h-40">
             <img
-              src={`${import.meta.env.VITE_APP_ASSETS_URL}/uploads/${avatar}`}
+              src={avatar}
               alt="User Avatar"
               className="w-full h-full object-cover"
             />
