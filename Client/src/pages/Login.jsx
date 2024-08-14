@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { UserContext } from "../context/userContext";
 import { toast } from "react-toastify";
+import Loader from "../components/Loader";
 
 const Login = () => {
   const [userData, setUserData] = useState({
@@ -10,6 +11,7 @@ const Login = () => {
     password: "",
   });
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { setCurrentUser } = useContext(UserContext);
   const BASE_URL = import.meta.env.VITE_APP_BASE_URL;
@@ -22,6 +24,7 @@ const Login = () => {
     e.preventDefault();
     setError("");
     try {
+      setIsLoading(true);
       const response = await axios.post(`${BASE_URL}/users/login`, userData);
       const user = await response.data;
       setCurrentUser(user);
@@ -31,7 +34,11 @@ const Login = () => {
       setError(error.response.data.message);
       toast.error(error.response.data);
     }
+    setIsLoading(false);
   };
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <section className="flex items-center justify-center min-h-screen bg-gray-800 p-4">
@@ -65,6 +72,7 @@ const Login = () => {
           />
           <button
             type="submit"
+            disabled={isLoading ? true : false}
             className="px-4 py-2 bg-blue-700 rounded-lg text-white hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             Login

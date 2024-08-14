@@ -5,6 +5,7 @@ const User = require("../models/userModel.js");
 const fs = require("fs");
 const path = require("path");
 const { v4: uuid } = require("uuid");
+const { uploadOnCloudinary } = require("../utils/cloudinary.js");
 
 // POST: api/users/register
 const registerUser = async (req, res, next) => {
@@ -82,56 +83,98 @@ const getUser = async (req, res, next) => {
 
 // get api/users/change_avatar
 // Protected
+
+// const changeAvatar = async (req, res, next) => {
+//   try {
+//     if (!req.files.avatar) {
+//       return next(new HttpError("Please choose an image", 422));
+//     }
+//     // find user from database
+//     const user = await User.findById(req.user.id);
+//     if (user.avatar) {
+//       fs.unlink(path.join(__dirname, "..", "uploads", user.avatar), (err) => {
+//         if (err) {
+//           console.error("Error deleting old avatar:", err);
+//           return next(new HttpError("Failed to delete old avatar", 500));
+//         }
+//       });
+//     }
+//     const { avatar } = req.files;
+//     if (avatar.size > 500000) {
+//       return next(
+//         new HttpError(
+//           "Profile picture is too big. Should be less than 500kb",
+//           422
+//         )
+//       );
+//     }
+//     let fileName = avatar.name;
+//     let splitedFileName = fileName.split(".");
+//     let newFileName =
+//       splitedFileName[0] +
+//       uuid() +
+//       "." +
+//       splitedFileName[splitedFileName.length - 1];
+//     avatar.mv(
+//       path.join(__dirname, "..", "uploads", newFileName),
+//       async (err) => {
+//         if (err) {
+//           return next(new HttpError(err));
+//         }
+//         const updatedAvatar = await User.findByIdAndUpdate(
+//           req.user.id,
+//           { avatar: newFileName },
+//           { new: true }
+//         );
+//         if (!updatedAvatar) {
+//           return next(new HttpError("Avatar could.nt be changed,", 422));
+//         }
+//         res.status(200).json(updatedAvatar);
+//       }
+//     );
+//   } catch (error) {
+//     return next(new HttpError(error));
+//   }
+// };
+
 const changeAvatar = async (req, res, next) => {
   try {
-    if (!req.files.avatar) {
-      return next(new HttpError("Please choose an image", 422));
+    // Ensure the avatar file is present in the request
+    if (!req.file) {
+      return next(new HttpError("No file provided.", 422));
     }
-    // find user from database
-    const user = await User.findById(req.user.id);
-    if (user.avatar) {
-      fs.unlink(path.join(__dirname, "..", "uploads", user.avatar), (err) => {
-        if (err) {
-          console.error("Error deleting old avatar:", err);
-          return next(new HttpError("Failed to delete old avatar", 500));
-        }
-      });
+
+    // Get the path to the uploaded file
+    const avatarLocalPath = req.file.path;
+
+    // Upload the avatar to Cloudinary
+    const cloudinaryResult = await uploadOnCloudinary(avatarLocalPath);
+    if (!cloudinaryResult) {
+      return next(new HttpError("Avatar upload failed", 422));
     }
-    const { avatar } = req.files;
-    if (avatar.size > 500000) {
-      return next(
-        new HttpError(
-          "Profile picture is too big. Should be less than 500kb",
-          422
-        )
-      );
-    }
-    let fileName = avatar.name;
-    let splitedFileName = fileName.split(".");
-    let newFileName =
-      splitedFileName[0] +
-      uuid() +
-      "." +
-      splitedFileName[splitedFileName.length - 1];
-    avatar.mv(
-      path.join(__dirname, "..", "uploads", newFileName),
-      async (err) => {
-        if (err) {
-          return next(new HttpError(err));
-        }
-        const updatedAvatar = await User.findByIdAndUpdate(
-          req.user.id,
-          { avatar: newFileName },
-          { new: true }
-        );
-        if (!updatedAvatar) {
-          return next(new HttpError("Avatar could.nt be changed,", 422));
-        }
-        res.status(200).json(updatedAvatar);
-      }
+
+    // Get the URL of the uploaded image from Cloudinary
+    const avatarUrl = cloudinaryResult.secure_url || cloudinaryResult.url;
+
+    // Update the user's avatar in the database
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user.id,
+      { avatar: avatarUrl },
+      { new: true }
     );
+
+    if (!updatedUser) {
+      return next(new HttpError("User not found or update failed.", 404));
+    }
+
+    // Return the updated user data with the new avatar URL
+    res.status(200).json({
+      message: "Avatar updated successfully",
+      avatar: updatedUser.avatar,
+    });
   } catch (error) {
-    return next(new HttpError(error));
+    console.error("Error in changeAvatar:", error);
+    return next(new HttpError("Internal Server Error", 500));
   }
 };
 
