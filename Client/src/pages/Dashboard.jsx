@@ -55,9 +55,7 @@ const Dashboard = () => {
                 <div className="w-16 h-16 min-w-[4rem] rounded-xl overflow-hidden flex-shrink-0">
                   <img
                     className="object-cover w-full h-full"
-                    src={`${import.meta.env.VITE_APP_ASSETS_URL}/uploads/${
-                      post.thumbnail
-                    }`}
+                    src={post.thumbnail}
                     alt={post.title}
                   />
                 </div>

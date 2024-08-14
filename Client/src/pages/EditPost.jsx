@@ -15,7 +15,7 @@ const EditPost = () => {
   const { currentUser } = useContext(UserContext);
   const token = currentUser?.token;
   const { id } = useParams();
-  
+
   const BASE_URL = import.meta.env.VITE_APP_BASE_URL;
 
   const navigate = useNavigate();
@@ -37,27 +37,60 @@ const EditPost = () => {
     };
     getPost();
   }, []);
+  // const editPost = async (e) => {
+  //   e.preventDefault();
+  //   const postData = new FormData();
+  //   postData.set("title", title);
+  //   postData.set("category", category);
+  //   postData.set("description", description);
+  //   postData.set("thumbnail", thumbnail);
+  //   try {
+  //     const response = await axios.patch(`${BASE_URL}/posts/${id}`, postData, {
+  //       withCredentials: true,
+  //       headers: { Authorization: `Bearer ${token}` },
+  //     });
+  //     if (response.status == 200) {
+  //       toast.success("Succesfully updated the post");
+  //       return navigate("/");
+  //     }
+  //   } catch (error) {
+  //     setError(error.response.data.message);
+  //     toast.error(error.response.data.message);
+  //   }
+  // };
   const editPost = async (e) => {
     e.preventDefault();
+
+    if (!title || !category || !description) {
+      setError("Please fill in all required fields.");
+      return;
+    }
+
     const postData = new FormData();
-    postData.set("title", title);
-    postData.set("category", category);
-    postData.set("description", description);
-    postData.set("thumbnail", thumbnail);
+    postData.append("title", title);
+    postData.append("category", category);
+    postData.append("description", description);
+
+    if (thumbnail) {
+      postData.append("thumbnail", thumbnail); // Only append if a new thumbnail is selected
+    }
+
     try {
       const response = await axios.patch(`${BASE_URL}/posts/${id}`, postData, {
         withCredentials: true,
         headers: { Authorization: `Bearer ${token}` },
       });
-      if (response.status == 200) {
-             toast.success("Succesfully updated the post");
-        return navigate("/");
+
+      if (response.status === 200) {
+        toast.success("Successfully updated the post");
+        navigate("/");
       }
     } catch (error) {
-      setError(error.response.data.message);
-           toast.error(error.response.data.message);
+      setError(error.response?.data?.message || "Failed to update post.");
+      toast.error(error.response?.data?.message || "Failed to update post.");
     }
   };
+
   const modules = {
     toolbar: [
       [{ header: [1, 2, 3, 4, 5, 6, false] }],
