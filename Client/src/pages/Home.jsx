@@ -3,7 +3,7 @@ import Posts from "../components/Posts";
 
 const Home = () => {
   return (
-    <div className="w-screen">
+    <div className="w-full">
       <Posts />
     </div>
   );
