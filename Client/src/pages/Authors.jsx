@@ -40,9 +40,7 @@ const Authors = () => {
               <div className="w-16 h-16 overflow-hidden">
                 <img
                   className="object-cover w-full h-full rounded-full"
-                  src={`${
-                    import.meta.env.VITE_APP_ASSETS_URL
-                  }/uploads/${avatar}`}
+                  src={avatar}
                   alt={`Image of ${name}`}
                 />
               </div>
