@@ -13,14 +13,22 @@ const PostsItem = ({
 }) => {
   const shortDesc =
     description.length > 145 ? description.substr(0, 145) + "..." : description;
-  const postTitle = title.length > 30 ? title.substr(0, 30) + "..." : title;
+  const postTitle = title.length > 80 ? title.substr(0, 30) + "..." : title;
 
   const removeExtraSpaceBetweenTags = (html) => {
     return html
-      .replace(/<p>/g, '<span style="display:inline;">')
-      .replace(/<\/p>/g, "</span>")
-      .replace(/<h[1-6]>/g, '<span style="display:inline; font-weight:bold;">')
-      .replace(/<\/h[1-6]>/g, "</span>");
+      .replace(/^\s+/g, "") // Remove leading whitespace and newlines
+      .replace(/<p>\s*<\/p>/g, "") // Remove empty <p> tags
+      .replace(/<p>\s*/g, '<span style="display:inline;">')
+      .replace(/\s*<\/p>/g, "</span>")
+      .replace(
+        /<h[1-6]>\s*/g,
+        '<span style="display:inline; font-weight:bold;">'
+      )
+      .replace(/\s*<\/h[1-6]>/g, "</span>")
+      .replace(/\n\s*/g, " ") // Replace line breaks and leading spaces with a single space
+      .replace(/\s+/g, " ") // Replace multiple spaces with a single space
+      .trim(); // Trim any remaining leading/trailing whitespace
   };
 
   return (
@@ -28,13 +36,13 @@ const PostsItem = ({
       <div className="rounded-md h-48 sm:h-64 overflow-hidden w-full">
         <img
           className="w-full h-full object-cover"
-          src={thumbnail}
+          src={thumbnail.replace("/upload/", "/upload/f_webp/")}
           alt={title}
         />
       </div>
       <div className="flex flex-col flex-grow mt-4">
         <Link to={`/posts/${postID}`}>
-          <h3 className="text-lg font-bold hover:text-emerald-400 text-blue-600 transition-colors duration-200 break-words">
+          <h3 className="text-lg font-bold hover:text-emerald-400 text-blue-600 transition-colors truncate duration-200 break-words">
             {postTitle}
           </h3>
         </Link>

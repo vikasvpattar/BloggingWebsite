@@ -4,6 +4,7 @@ import "react-quill/dist/quill.snow.css";
 import { UserContext } from "../context/userContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Loader from "../components/Loader";
 import { toast } from "react-toastify";
 
 const CreatePost = () => {
@@ -12,6 +13,7 @@ const CreatePost = () => {
   const [description, setDescription] = useState("");
   const [thumbnail, setThumbnail] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const { currentUser } = useContext(UserContext);
   const token = currentUser?.token;
   const BASE_URL = import.meta.env.VITE_APP_BASE_URL;
@@ -27,7 +29,7 @@ const CreatePost = () => {
 
   const createPost = async (e) => {
     e.preventDefault();
-
+    setIsLoading(true);
     const postData = new FormData();
     postData.append("title", title);
     postData.append("category", category);
@@ -44,15 +46,18 @@ const CreatePost = () => {
       });
 
       if (response.status === 201) {
-             toast.success("Succesfully created the post");
+        toast.success("Succesfully created the post");
         navigate("/");
       }
     } catch (err) {
       console.error("Error creating post:", err);
-      toast.error("Error while creating the post")
+      toast.error("Error while creating the post");
     }
+    setIsLoading(false);
   };
-
+  if (isLoading) {
+    return <Loader />;
+  }
   const modules = {
     toolbar: [
       [{ header: [1, 2, 3, 4, 5, 6, false] }],
@@ -140,7 +145,7 @@ const CreatePost = () => {
             name="thumbnail"
             className="border border-slate-600 px-4 py-3 rounded-lg text-white"
             onChange={(e) => setThumbnail(e.target.files[0])}
-            accept="image/jpg, image/png, image/jpeg"
+            accept="image/jpg, image/png, image/jpeg img/webp"
           />
           <button
             className="px-6 py-3 bg-blue-700 rounded-lg text-white w-full sm:w-auto self-center hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500"

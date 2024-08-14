@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Loader from "../components/Loader";
 
 const Register = () => {
   const [userData, setUserData] = useState({
@@ -11,6 +12,7 @@ const Register = () => {
     password2: "",
   });
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const inputChangeHandler = (e) => {
     setUserData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -20,6 +22,7 @@ const Register = () => {
   const registerUser = async (e) => {
     e.preventDefault();
     setError("");
+    setIsLoading(true);
     try {
       const response = await axios.post(`${BASE_URL}/users/register`, userData);
       const newUser = await response.data;
@@ -32,7 +35,11 @@ const Register = () => {
       setError(error.response.data.message);
       toast.error(error.response.data);
     }
+    setIsLoading(false);
   };
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <section className="flex items-center justify-center min-h-screen bg-gray-800 p-4">

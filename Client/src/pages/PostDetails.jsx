@@ -33,7 +33,7 @@ const PostDetails = () => {
   }
 
   return (
-    <section className="flex items-center justify-center min-h-screen  p-4">
+    <section className="flex items-center justify-center min-h-screen p-4">
       <div className="w-full max-w-3xl bg-gray-800 backdrop-blur-md border border-gray-700 rounded-lg p-6 shadow-lg">
         {error && <p className="text-red-500 mb-4">{error}</p>}
         {post && (
@@ -61,7 +61,7 @@ const PostDetails = () => {
               </h1>
               <div className="relative w-full h-80">
                 <img
-                  src={post.thumbnail}
+                  src={post.thumbnail.replace("/upload/", "/upload/f_webp/")}
                   alt={post.title}
                   className="absolute inset-0 w-full h-full object-cover rounded-lg"
                 />
