@@ -26,7 +26,7 @@ const PostDetails = () => {
       setIsLoading(false);
     };
     getPost();
-  }, [id, BASE_URL]);
+  }, [id]);
 
   if (isLoading) {
     return <Loader />;
@@ -59,11 +59,11 @@ const PostDetails = () => {
               <h1 className="text-2xl font-bold text-white break-words">
                 {post.title}
               </h1>
-              <div className="relative w-full h-80">
+              <div className="relative w-full">
                 <img
                   src={post.thumbnail.replace("/upload/", "/upload/f_webp/")}
                   alt={post.title}
-                  className="absolute inset-0 w-full h-full object-cover rounded-lg"
+                  className="w-full h-auto object-contain rounded-lg"
                 />
               </div>
             </div>
