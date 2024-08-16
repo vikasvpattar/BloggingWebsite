@@ -10,20 +10,20 @@ const CategoryPosts = () => {
   const BASE_URL = import.meta.env.VITE_APP_BASE_URL;
   const { category } = useParams();
 
+  const fetchPosts = async () => {
+    setError("");
+    setIsLoading(true);
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/posts/categories/${category}`
+      );
+      setPosts(response?.data);
+    } catch (error) {
+      setError(error.response.data.message);
+    }
+    setIsLoading(false);
+  };
   useEffect(() => {
-    const fetchPosts = async () => {
-      setError("");
-      setIsLoading(true);
-      try {
-        const response = await axios.get(
-          `${BASE_URL}/posts/categories/${category}`
-        );
-        setPosts(response?.data);
-      } catch (error) {
-        setError(error.response.data.message);
-      }
-      setIsLoading(false);
-    };
     fetchPosts();
   }, [category]);
   if (isLoading) {

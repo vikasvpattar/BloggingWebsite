@@ -21,20 +21,20 @@ const Dashboard = () => {
     }
   }, [token, navigate]);
 
+  const fetchPosts = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get(`${BASE_URL}/posts/users/${id}`, {
+        withCredentials: true,
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setPosts(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+    setIsLoading(false);
+  };
   useEffect(() => {
-    const fetchPosts = async () => {
-      setIsLoading(true);
-      try {
-        const response = await axios.get(`${BASE_URL}/posts/users/${id}`, {
-          withCredentials: true,
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setPosts(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-      setIsLoading(false);
-    };
     fetchPosts();
   }, [id, token]);
 

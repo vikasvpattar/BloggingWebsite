@@ -35,6 +35,7 @@ const PostsItem = ({
     <article className="bg-slate-800/60 backdrop-blur-md border-slate-700 p-4 rounded-lg shadow-sm hover:bg-slate-800 transition-shadow duration-200 border max-w-full overflow-hidden flex flex-col h-full">
       <div className="rounded-md h-48 sm:h-64 overflow-hidden w-full">
         <img
+          loading="lazy"
           className="w-full h-full object-cover"
           src={thumbnail.replace("/upload/", "/upload/f_webp/")}
           alt={title}

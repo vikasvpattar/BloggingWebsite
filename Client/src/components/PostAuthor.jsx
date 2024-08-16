@@ -12,15 +12,15 @@ const PostAuthor = ({ createdAt, authorID }) => {
   const [author, setAuthor] = useState({});
   const BASE_URL = import.meta.env.VITE_APP_BASE_URL;
 
+  const getAuthor = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/users/${authorID}`);
+      setAuthor(response?.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
-    const getAuthor = async () => {
-      try {
-        const response = await axios.get(`${BASE_URL}/users/${authorID}`);
-        setAuthor(response?.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
     getAuthor();
   }, []);
 

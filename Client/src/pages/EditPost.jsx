@@ -27,18 +27,18 @@ const EditPost = () => {
       navigate("/login");
     }
   }, []);
+  const getPost = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get(`${BASE_URL}/posts/${id}`);
+      setTitle(response?.data.title);
+      setDescription(response?.data.description);
+    } catch (error) {
+      setError(error);
+    }
+    setIsLoading(false);
+  };
   useEffect(() => {
-    const getPost = async () => {
-      setIsLoading(true);
-      try {
-        const response = await axios.get(`${BASE_URL}/posts/${id}`);
-        setTitle(response?.data.title);
-        setDescription(response?.data.description);
-      } catch (error) {
-        setError(error);
-      }
-      setIsLoading(false);
-    };
     getPost();
   }, []);
   const editPost = async (e) => {

@@ -9,17 +9,17 @@ const Authors = () => {
   const [authors, setAuthors] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  const getAuthors = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get(`${BASE_URL}/users`);
+      setAuthors(response?.data);
+    } catch (error) {
+      console.log(error);
+    }
+    setIsLoading(false);
+  };
   useEffect(() => {
-    const getAuthors = async () => {
-      setIsLoading(true);
-      try {
-        const response = await axios.get(`${BASE_URL}/users`);
-        setAuthors(response?.data);
-      } catch (error) {
-        console.log(error);
-      }
-      setIsLoading(false);
-    };
     getAuthors();
   }, []);
 

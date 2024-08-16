@@ -12,19 +12,19 @@ const AuthorPost = () => {
   const BASE_URL = import.meta.env.VITE_APP_BASE_URL;
   const { id } = useParams();
 
+  const fetchPosts = async () => {
+    setError("");
+    setIsLoading(true);
+    try {
+      const response = await axios.get(`${BASE_URL}/posts/users/${id}`);
+      setPosts(response?.data);
+    } catch (error) {
+      setError(error.response.data.message);
+      toast.error(error.response.data.message);
+    }
+    setIsLoading(false);
+  };
   useEffect(() => {
-    const fetchPosts = async () => {
-      setError("");
-      setIsLoading(true);
-      try {
-        const response = await axios.get(`${BASE_URL}/posts/users/${id}`);
-        setPosts(response?.data);
-      } catch (error) {
-        setError(error.response.data.message);
-        toast.error(error.response.data.message);
-      }
-      setIsLoading(false);
-    };
     fetchPosts();
   }, [id]);
   if (isLoading) {
